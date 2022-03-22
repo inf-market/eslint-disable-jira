@@ -23,7 +23,7 @@ class GitHub {
 
     async getPRDiff (repo, prId) {
         return this.fetch('getCommitDiff',
-            { pathname: `/tree/bugfix/bugoton` },
+            { pathname: `repos/inf-market/inf-frontend/branches/bugfix/bugoton` },
             {
                 headers: {
                     Accept: 'application/vnd.github.v3.diff',
