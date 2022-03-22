@@ -42,19 +42,21 @@ module.exports = class {
         }
 
         // map custom fields
-        const { projects } = await this.Jira.getCreateMeta({
+        const resp = await this.Jira.getCreateMeta({
             expand: 'projects.issuetypes.fields',
             projectKeys: projectKey,
             issuetypeNames: issuetypeName,
         })
 
-        if (projects.length === 0) {
+        console.log(resp);
+
+        if (resp.projects.length === 0) {
             console.error(`project '${projectKey}' not found`)
 
             return
         }
 
-        const [project] = projects
+        const [project] = resp.projects
 
         if (project.issuetypes.length === 0) {
             console.error(`issuetype '${issuetypeName}' not found`)
