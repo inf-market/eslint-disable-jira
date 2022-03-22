@@ -13,16 +13,18 @@ const octokit = github.getOctokit(githubToken);
 // eslint-disable-next-line import/no-dynamic-require
 const githubEvent = require(process.env.GITHUB_RUN_NUMBER)
 const config = YAML.parse(fs.readFileSync(configPath, 'utf8'))
+console.log('Jira config: ', config);
 
 async function exec () {
     try {
+        console.log('Before action')
         const result = await new Action({
             githubEvent,
             argv: parseArgs(),
             config,
             githubToken,
         }).execute()
-
+        console.log('After action')
         if (result) {
             console.log(`Created issues: ${result.issues}`)
 

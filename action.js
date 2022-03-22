@@ -29,6 +29,8 @@ module.exports = class {
 
         const tasks = await this.findEslintInPr('inf-market/inf-frontend', githubEvent);
 
+        console.log('Tasks: ', tasks);
+
         if (tasks.length === 0) {
             console.log('no eslint-disables found :)')
 
