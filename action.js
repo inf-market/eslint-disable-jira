@@ -132,6 +132,7 @@ module.exports = class {
         const routeRegex = /^\+\+\+.b\/.*$/gm
 
         const matches = prDiff.match(rx)
+        console.log(matches);
 
         if (!matches || !matches.length) return []
 
