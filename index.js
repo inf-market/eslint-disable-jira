@@ -11,7 +11,7 @@ const octokit = github.getOctokit(githubToken);
 
 
 // eslint-disable-next-line import/no-dynamic-require
-const githubEvent = require(process.env.GITHUB_EVENT_PATH)
+const githubEvent = require(process.env.GITHUB_RUN_NUMBER)
 const config = YAML.parse(fs.readFileSync(configPath, 'utf8'))
 
 async function exec () {

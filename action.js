@@ -24,14 +24,10 @@ module.exports = class {
         const { argv, githubEvent, config } = this
         const projectKey = argv.project
         const issuetypeName = argv.issuetype
-        let tasks = []
-
         const jiraIssue = config.issue ? await this.Jira.getIssue(config.issue) : null
 
 
-        if (Number(githubEvent.pull_request.commits) > 0) {
-            tasks = await this.findEslintInPr(githubEvent.repository, githubEvent.pull_request.number)
-        }
+        const tasks = await this.findEslintInPr('inf-market/inf-frontend', githubEvent);
 
         if (tasks.length === 0) {
             console.log('no eslint-disables found :)')
@@ -87,7 +83,7 @@ module.exports = class {
         
         
         
-        Action was triggered by this PR: ${githubEvent.pull_request.html_url}
+        Action was triggered by this RUN: ${githubEvent}
         `,
                 },
             ]
@@ -120,7 +116,7 @@ module.exports = class {
     }
 
     async findEslintInPr (repo, prId) {
-        const prDiff = await this.GitHub.getPRDiff(repo.full_name, prId)
+        const prDiff = await this.GitHub.getPRDiff(repo, prId)
         const rx = /^\+.*(?:\/\/|\/\*)\s+eslint-disable(.*)$/gm
         const routeRegex = /^\+\+\+.b\/.*$/gm
 
