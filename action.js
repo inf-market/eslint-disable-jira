@@ -127,12 +127,11 @@ module.exports = class {
 
     async findEslintInPr (repo, prId) {
         const prDiff = await this.GitHub.getPRDiff(repo.full_name, prId)
-        console.log('Str epta', prDiff.toString());
         const rx = /^\+.*(?:\/\/|\/\*)\s+eslint-disable(.*)$/gm
         const routeRegex = /^\+\+\+.b\/.*$/gm
 
         const matches = prDiff.match(rx)
-        console.log(matches);
+        console.log('Matches:', matches);
 
         if (!matches || !matches.length) return []
 
@@ -140,6 +139,7 @@ module.exports = class {
             .map(_.trim)
             .filter(Boolean)
             .map((match) => {
+                console.log('Match', match);
                 const end = prDiff.indexOf(match)
 
                 const routeMatches = prDiff.slice(0, end).match(routeRegex)
