@@ -6,8 +6,9 @@ const github = require('@actions/github');
 const cliConfigPath = `${process.env.HOME}/.jira.d/config.yml`
 const configPath = `${process.env.HOME}/jira/config.yml`
 const Action = require('./action')
-const githubToken = process.env.GITHUB_TOKEN
+const githubToken = process.env.GITHUB_TOKEN;
 const octokit = github.getOctokit(githubToken);
+const commitId = process.env.GITHUB_SHA;
 
 
 // eslint-disable-next-line import/no-dynamic-require
@@ -23,6 +24,7 @@ async function exec () {
             argv: parseArgs(),
             config,
             githubToken,
+            commitId
         }).execute()
         console.log('After action')
         if (result) {
