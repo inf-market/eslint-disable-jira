@@ -127,7 +127,7 @@ module.exports = class {
 
     async findEslintInPr (repo, prId) {
         const prDiff = await this.GitHub.getPRDiff(repo.full_name, prId)
-        console.log(prDiff);
+        console.log('Str epta', prDiff.toString());
         const rx = /^\+.*(?:\/\/|\/\*)\s+eslint-disable(.*)$/gm
         const routeRegex = /^\+\+\+.b\/.*$/gm
 
