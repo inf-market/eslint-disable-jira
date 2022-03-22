@@ -24,8 +24,6 @@ module.exports = class {
         const { argv, githubEvent, config } = this
         const projectKey = argv.project
         const issuetypeName = argv.issuetype
-        let tasks = []
-
         if (githubEvent.pull_request.title.indexOf('automerge_release') !== -1) {
             console.log('Automerge is excluded from this action')
 
@@ -34,10 +32,8 @@ module.exports = class {
 
         const jiraIssue = config.issue ? await this.Jira.getIssue(config.issue) : null
 
-
-        if (Number(githubEvent.pull_request.commits) > 0) {
-            tasks = await this.findEslintInPr(githubEvent.repository, githubEvent.pull_request.number)
-        }
+        const tasks = await this.findEslintInPr(githubEvent.repository, githubEvent.pull_request.number)
+        console.log('Tasks', tasks);
 
         if (tasks.length === 0) {
             console.log('no eslint-disables found :)')
