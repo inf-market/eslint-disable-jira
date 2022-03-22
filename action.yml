@@ -1,0 +1,30 @@
+name: Jira issue from eslint-disable comments
+description: Create Jira issue for eslint disabling comments
+branding:
+    icon: 'check-square'
+    color: 'blue'
+inputs:
+    project:
+        description: Key of the project
+        required: true
+    issuetype:
+        description: "Type of the issue to be created. Example: 'Incident'"
+        required: true
+    baseUrl:
+        description: "Base URL for JIRA"
+        required: true
+    email:
+        description: "Email of Inf services bot account"
+        required: true
+    token:
+        description: "Token of inf services bot account"
+        required: true
+    taskId:
+        description: "Original Jira task ID"
+        required: true
+outputs:
+    issues:
+        description: Well-formed JSON array containing keys of all newly created issues
+runs:
+    using: 'node12'
+    main: './dist/index.js'
