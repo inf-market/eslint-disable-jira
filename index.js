@@ -6,27 +6,23 @@ const github = require('@actions/github');
 const cliConfigPath = `${process.env.HOME}/.jira.d/config.yml`
 const configPath = `${process.env.HOME}/jira/config.yml`
 const Action = require('./action')
-const githubToken = process.env.GITHUB_TOKEN;
+const githubToken = process.env.GITHUB_TOKEN
 const octokit = github.getOctokit(githubToken);
-const commitId = process.env.GITHUB_SHA;
 
 
 // eslint-disable-next-line import/no-dynamic-require
-const githubEvent = process.env.GITHUB_RUN_NUMBER;
+const githubEvent = require(process.env.GITHUB_EVENT_PATH)
 const config = YAML.parse(fs.readFileSync(configPath, 'utf8'))
-console.log('Jira config: ', config);
 
 async function exec () {
     try {
-        console.log('Before action')
         const result = await new Action({
             githubEvent,
             argv: parseArgs(),
             config,
             githubToken,
-            commitId
         }).execute()
-        console.log('After action')
+
         if (result) {
             console.log(`Created issues: ${result.issues}`)
 

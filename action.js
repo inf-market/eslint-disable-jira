@@ -3,7 +3,7 @@ const Jira = require('./common/net/Jira')
 const GitHub = require('./common/net/GitHub')
 
 module.exports = class {
-    constructor ({ githubEvent, argv, config, githubToken, commitId }) {
+    constructor ({ githubEvent, argv, config, githubToken }) {
         this.Jira = new Jira({
             baseUrl: config.baseUrl,
             token: config.token,
@@ -18,19 +18,26 @@ module.exports = class {
         this.argv = argv
         this.githubEvent = githubEvent
         this.githubToken = githubToken
-        this.commitId = commitId
     }
 
     async execute () {
-        const { argv, githubEvent, config, commitId } = this
+        const { argv, githubEvent, config } = this
         const projectKey = argv.project
         const issuetypeName = argv.issuetype
+        let tasks = []
+
+        if (githubEvent.pull_request.title.indexOf('automerge_release') !== -1) {
+            console.log('Automerge is excluded from this action')
+
+            return
+        }
+
         const jiraIssue = config.issue ? await this.Jira.getIssue(config.issue) : null
 
 
-        const tasks = await this.findEslintInPr('inf-market/inf-frontend', commitId);
-
-        console.log('Tasks: ', tasks);
+        if (Number(githubEvent.pull_request.commits) > 0) {
+            tasks = await this.findEslintInPr(githubEvent.repository, githubEvent.pull_request.number)
+        }
 
         if (tasks.length === 0) {
             console.log('no eslint-disables found :)')
@@ -86,7 +93,7 @@ module.exports = class {
         
         
         
-        Action was triggered by this RUN: ${githubEvent}
+        Action was triggered by this PR: ${githubEvent.pull_request.html_url}
         `,
                 },
             ]
@@ -118,8 +125,8 @@ module.exports = class {
         }))
     }
 
-    async findEslintInPr (repo, commitId) {
-        const prDiff = await this.GitHub.getCommitDiff(repo, commitId)
+    async findEslintInPr (repo, prId) {
+        const prDiff = await this.GitHub.getPRDiff(repo.full_name, prId)
         const rx = /^\+.*(?:\/\/|\/\*)\s+eslint-disable(.*)$/gm
         const routeRegex = /^\+\+\+.b\/.*$/gm
 

@@ -13,7 +13,7 @@ class GitHub {
 
     async getCommitDiff (repo, commitId) {
         return this.fetch('getCommitDiff',
-            { pathname: `/repos/inf-market/inf-frontend/commits/${commitId}` },
+            { pathname: `/repos/${repo}/commits/${commitId}` },
             {
                 headers: {
                     Accept: 'application/vnd.github.v3.diff',
@@ -23,7 +23,7 @@ class GitHub {
 
     async getPRDiff (repo, prId) {
         return this.fetch('getCommitDiff',
-            { pathname: `repos/inf-market/inf-frontend/branches/bugfix/bugoton` },
+            { pathname: `/repos/${repo}/pulls/${prId}` },
             {
                 headers: {
                     Accept: 'application/vnd.github.v3.diff',
