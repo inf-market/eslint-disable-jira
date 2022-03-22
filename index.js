@@ -14,6 +14,8 @@ const octokit = github.getOctokit(githubToken);
 const githubEvent = require(process.env.GITHUB_EVENT_PATH)
 const config = YAML.parse(fs.readFileSync(configPath, 'utf8'))
 
+console.log('JIRA CONFIG: ', config);
+
 async function exec () {
     try {
         const result = await new Action({
